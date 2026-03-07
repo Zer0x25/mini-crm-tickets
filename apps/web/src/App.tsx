@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import type { ListTicketsResponseDto, TicketSummaryDto } from "@mini-crm/shared";
-
-const API_BASE_URL = "http://localhost:3001";
+import type { TicketSummaryDto } from "@mini-crm/shared";
+import { getTickets } from "./api/tickets";
 
 function App() {
   const [tickets, setTickets] = useState<TicketSummaryDto[]>([]);
@@ -13,15 +12,7 @@ function App() {
 
     const loadTickets = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/tickets`, {
-          signal: controller.signal,
-        });
-
-        if (!response.ok) {
-          throw new Error(`Request failed with status ${response.status}`);
-        }
-
-        const data = (await response.json()) as ListTicketsResponseDto;
+        const data = await getTickets(controller.signal);
         setTickets(data.tickets);
       } catch (error) {
         if (controller.signal.aborted) {

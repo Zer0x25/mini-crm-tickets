@@ -1,6 +1,6 @@
 import app from "./app.js";
 
-const PORT = Number(process.env.PORT ?? 3001);
+const PORT = Number(process.env.API_PORT ?? process.env.PORT ?? 3001);
 
 const start = async () => {
   try {

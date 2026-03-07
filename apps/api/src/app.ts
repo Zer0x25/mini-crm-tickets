@@ -6,8 +6,10 @@ const app = Fastify({
   logger: true,
 });
 
+const corsOrigin = process.env.CORS_ORIGIN ?? `http://localhost:${process.env.WEB_PORT ?? 3000}`;
+
 void app.register(cors, {
-  origin: true,
+  origin: corsOrigin,
 });
 
 const ticketRecords = [
