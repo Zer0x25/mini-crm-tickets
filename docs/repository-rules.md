@@ -53,3 +53,18 @@ Create or update an ADR when a change affects:
 - public contract shape strategy
 - build/runtime topology
 - cross-cutting technical standards with structural impact
+
+## Task Execution Rule
+
+- Every non-trivial implementation request to the Coding Agent must start from a task file in `tasks/`.
+- Chat instructions alone are not a sufficient execution source for material repository changes.
+- Each task file must define:
+  - objective
+  - in scope
+  - out of scope
+  - relevant ADRs
+  - affected areas
+  - acceptance criteria
+  - risks or constraints
+- Reviews must validate changes against the task file and accepted ADRs.
+- If scope changes materially, the task file must be updated before further implementation.

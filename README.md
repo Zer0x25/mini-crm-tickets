@@ -109,3 +109,12 @@ Este repositorio prioriza:
 - separación de capas
 - revisabilidad del trabajo
 - velocidad solo cuando no compromete lo anterior
+
+### Execution rule
+
+Before asking the Coding Agent to implement non-trivial changes:
+
+1. create or update a task file in `tasks/`
+2. define explicit scope and acceptance criteria
+3. implement only that task
+4. review changes against the task file and ADRs
