@@ -1,18 +1,18 @@
-import express from "express";
+import Fastify from "fastify";
 
-const app = express();
+const app = Fastify();
 
-// Middleware
-app.use(express.json());
-
-// Health check
-app.get("/health", (req, res) => {
-  res.json({ status: "ok", timestamp: new Date().toISOString() });
+app.get("/health", async () => {
+  return {
+    status: "ok",
+    timestamp: new Date().toISOString(),
+  };
 });
 
-// Placeholder routes
-app.get("/", (req, res) => {
-  res.json({ message: "Mini CRM Tickets API - Implementation pending" });
+app.get("/", async () => {
+  return {
+    message: "Mini CRM Tickets API - implementation pending",
+  };
 });
 
 export default app;

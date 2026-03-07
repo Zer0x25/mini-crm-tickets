@@ -1,7 +1,15 @@
-import app from "./app";
+import app from "./app.js";
 
-const PORT = process.env.PORT || 3001;
+const PORT = Number(process.env.PORT ?? 3001);
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+const start = async () => {
+  try {
+    await app.listen({ port: PORT, host: "0.0.0.0" });
+    console.log(`Server running on port ${PORT}`);
+  } catch (error) {
+    app.log.error(error);
+    process.exit(1);
+  }
+};
+
+void start();

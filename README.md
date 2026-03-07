@@ -45,83 +45,67 @@ prompts/
 
 tasks/
   TASK-*.md
-Reglas estructurales
+```
 
-Los ADR aceptados son ley del repositorio.
+## Reglas estructurales
 
-apps/api es el único runtime con acceso a base de datos.
+- Los ADR aceptados son ley del repositorio.
+- `apps/api` es el único runtime con acceso a base de datos.
+- `apps/web` consume solo contratos públicos del backend.
+- `packages/shared` contiene solo DTOs, enums, schemas y utilidades puras.
+- No se usan modelos de persistencia como contratos públicos.
+- No se mezclan planificación, implementación y revisión en una sola responsabilidad.
 
-apps/web consume solo contratos públicos del backend.
+## AI Dev Loop
 
-packages/shared contiene solo DTOs, enums, schemas y utilidades puras.
+### Roles
 
-No se usan modelos de persistencia como contratos públicos.
+- Architect: define límites, coherencia estructural y necesidad de ADRs.
+- Planner: convierte objetivos en tareas ejecutables, acotadas y revisables.
+- Coding Agent: implementa solo la tarea asignada.
+- Reviewer: valida cambios contra tarea, ADRs y límites de arquitectura.
 
-No se mezclan planificación, implementación y revisión en una sola responsabilidad.
+### Flujo
 
-AI Dev Loop
-Roles
+- Definir o actualizar contexto y ADRs si corresponde.
+- Crear una tarea explícita en `tasks/`.
+- Ejecutar implementación acotada.
+- Revisar contra aceptación y arquitectura.
+- Corregir antes de ampliar alcance.
 
-Architect: define límites, coherencia estructural y necesidad de ADRs.
-
-Planner: convierte objetivos en tareas ejecutables, acotadas y revisables.
-
-Coding Agent: implementa solo la tarea asignada.
-
-Reviewer: valida cambios contra tarea, ADRs y límites de arquitectura.
-
-Flujo
-
-Definir o actualizar contexto y ADRs si corresponde.
-
-Crear una tarea explícita en tasks/.
-
-Ejecutar implementación acotada.
-
-Revisar contra aceptación y arquitectura.
-
-Corregir antes de ampliar alcance.
-
-Estado inicial esperado
+## Estado inicial esperado
 
 Bootstrap estructural del monorepo con:
 
-workspace operativo
+- workspace operativo
+- apps mínimas web y api
+- paquete shared
+- Prisma instalado en `apps/api`
+- scripts base de desarrollo, build y typecheck
 
-apps mínimas web y api
+## Comandos esperados
 
-paquete shared
-
-Prisma instalado en apps/api
-
-scripts base de desarrollo, build y typecheck
-
-Comandos esperados
+```bash
 pnpm install
 pnpm dev
 pnpm build
 pnpm typecheck
-Gobernanza
+```
+
+## Gobernanza
 
 Antes de introducir cambios estructurales:
 
-revisar ADRs en docs/adr
+- revisar ADRs en `docs/adr`
+- evitar mezclar contratos públicos con modelos de persistencia
+- mantener cambios mínimos, explícitos y revisables
 
-evitar mezclar contratos públicos con modelos de persistencia
-
-mantener cambios mínimos, explícitos y revisables
-
-Nota
+## Nota
 
 Este repositorio prioriza:
 
-estabilidad estructural
-
-claridad de contratos
-
-separación de capas
-
-revisabilidad del trabajo
-
-velocidad solo cuando no compromete lo anterior
-```
+- estabilidad estructural
+- claridad de contratos
+- separación de capas
+- revisabilidad del trabajo
+- velocidad solo cuando no compromete lo anterior
