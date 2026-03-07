@@ -8,9 +8,8 @@
     "build": "tsc -p tsconfig.json",
     "start": "node dist/index.js",
     "test": "echo \"No tests yet\"",
-    "lint": "echo \"No lint configured yet\"",
-    "typecheck": "tsc --noEmit -p tsconfig.json",
-    "format": "echo \"No format configured yet\""
+    "lint": "eslint . --max-warnings=0",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
     "fastify": "^5.2.1",

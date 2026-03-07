@@ -1,25 +1,35 @@
-# CI Workflow - Placeholder
-# TO BE IMPLEMENTED
+name: CI
 
-# This workflow will contain:
-# - Linting (ESLint, Prettier)
-# - Type checking (TypeScript)
-# - Building (both apps)
-# - Testing (unit, integration)
-# - Security scanning
-# - Deployment (staging/production) - Optional
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
-# Typical stages:
-# 1. Lint and format check
-# 2. TypeScript compilation
-# 3. Build web and api
-# 4. Run tests
-# 5. Security scanning
-# 6. Deploy to staging (if main branch)
+jobs:
+  verify:
+    runs-on: ubuntu-latest
 
-# Dependencies:
-# - Node.js 18+
-# - pnpm or npm
-# - Docker (for integration tests)
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-# Status: 🟡 Template placeholder - Implementation pending
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.0.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Build
+        run: pnpm build
