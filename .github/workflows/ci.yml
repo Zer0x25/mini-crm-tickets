@@ -1,0 +1,25 @@
+# CI Workflow - Placeholder
+# TO BE IMPLEMENTED
+
+# This workflow will contain:
+# - Linting (ESLint, Prettier)
+# - Type checking (TypeScript)
+# - Building (both apps)
+# - Testing (unit, integration)
+# - Security scanning
+# - Deployment (staging/production) - Optional
+
+# Typical stages:
+# 1. Lint and format check
+# 2. TypeScript compilation
+# 3. Build web and api
+# 4. Run tests
+# 5. Security scanning
+# 6. Deploy to staging (if main branch)
+
+# Dependencies:
+# - Node.js 18+
+# - pnpm or npm
+# - Docker (for integration tests)
+
+# Status: 🟡 Template placeholder - Implementation pending
