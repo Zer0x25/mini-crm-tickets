@@ -1,4 +1,11 @@
-// Shared types and utilities
-// To be populated as the project develops
+export type TicketStatus = "open";
 
-export const SHARED_PLACEHOLDER = "Implementation pending";
+export interface TicketSummaryDto {
+  id: string;
+  title: string;
+  status: TicketStatus;
+}
+
+export interface ListTicketsResponseDto {
+  tickets: TicketSummaryDto[];
+}
