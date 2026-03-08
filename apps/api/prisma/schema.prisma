@@ -10,5 +10,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Models will be added here as tasks are completed
-// See ADRs in docs/adr/ for architecture decisions
+model Ticket {
+  id     String @id
+  title  String
+  status String
+
+  @@map("tickets")
+}
