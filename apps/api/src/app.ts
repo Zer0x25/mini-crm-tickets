@@ -26,18 +26,33 @@ app.get("/", async () => {
   };
 });
 
-app.get("/tickets", async () => {
-  return listTickets();
+app.get("/tickets", async (_request, reply) => {
+  try {
+    return await listTickets();
+  } catch (error) {
+    app.log.error(error);
+    return reply.code(500).send({
+      message: "Internal server error",
+    });
+  }
 });
 
 app.post("/tickets", async (request, reply) => {
+  const parsedPayload = createTicketRequestSchema.safeParse(request.body);
+  if (!parsedPayload.success) {
+    return reply.code(400).send({
+      message: "Invalid request payload",
+    });
+  }
+
   try {
-    const payload = createTicketRequestSchema.parse(request.body);
-    const ticket = await createTicket(payload);
+    const ticket = await createTicket(parsedPayload.data);
     return reply.code(201).send(ticket);
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Invalid ticket payload";
-    return reply.code(400).send({ message });
+    app.log.error(error);
+    return reply.code(500).send({
+      message: "Internal server error",
+    });
   }
 });
 
