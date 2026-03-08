@@ -1,6 +1,7 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
-import { listTickets } from "./tickets.js";
+import { createTicket, listTickets } from "./tickets.js";
+import type { CreateTicketRequestDto } from "@mini-crm/shared";
 
 const app = Fastify({
   logger: true,
@@ -27,6 +28,16 @@ app.get("/", async () => {
 
 app.get("/tickets", async () => {
   return listTickets();
+});
+
+app.post<{ Body: CreateTicketRequestDto }>("/tickets", async (request, reply) => {
+  try {
+    const ticket = await createTicket(request.body);
+    return reply.code(201).send(ticket);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Invalid ticket payload";
+    return reply.code(400).send({ message });
+  }
 });
 
 export default app;

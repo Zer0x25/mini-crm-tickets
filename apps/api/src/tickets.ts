@@ -1,4 +1,10 @@
-import type { ListTicketsResponseDto, TicketStatus, TicketSummaryDto } from "@mini-crm/shared";
+import type {
+  CreateTicketRequestDto,
+  CreateTicketResponseDto,
+  ListTicketsResponseDto,
+  TicketStatus,
+  TicketSummaryDto,
+} from "@mini-crm/shared";
 import { prisma } from "./prisma.js";
 
 type TicketRecord = Awaited<ReturnType<typeof prisma.ticket.findMany>>[number];
@@ -19,6 +25,24 @@ const mapTicketRecordToDto = (record: TicketRecord): TicketSummaryDto => {
   };
 };
 
+const createTicketInputFromRequest = (request: CreateTicketRequestDto) => {
+  if (typeof request.title !== "string") {
+    throw new Error("Ticket title is required");
+  }
+
+  const title = request.title.trim();
+
+  if (title.length === 0) {
+    throw new Error("Ticket title is required");
+  }
+
+  return {
+    id: crypto.randomUUID(),
+    title,
+    status: "open" as const,
+  };
+};
+
 export const listTickets = async (): Promise<ListTicketsResponseDto> => {
   const records = await prisma.ticket.findMany({
     orderBy: {
@@ -28,5 +52,17 @@ export const listTickets = async (): Promise<ListTicketsResponseDto> => {
 
   return {
     tickets: records.map(mapTicketRecordToDto),
+  };
+};
+
+export const createTicket = async (
+  request: CreateTicketRequestDto,
+): Promise<CreateTicketResponseDto> => {
+  const record = await prisma.ticket.create({
+    data: createTicketInputFromRequest(request),
+  });
+
+  return {
+    ticket: mapTicketRecordToDto(record),
   };
 };
