@@ -1,44 +1,28 @@
-import type {
+import {
+  createTicketResponseSchema,
   CreateTicketRequestDto,
   CreateTicketResponseDto,
+  listTicketsResponseSchema,
   ListTicketsResponseDto,
-  TicketStatus,
-  TicketSummaryDto,
+  ticketStatusSchema,
+  ticketSummarySchema,
 } from "@mini-crm/shared";
 import { prisma } from "./prisma.js";
 
 type TicketRecord = Awaited<ReturnType<typeof prisma.ticket.findMany>>[number];
 
-const toTicketStatus = (status: string): TicketStatus => {
-  if (status === "open") {
-    return status;
-  }
-
-  throw new Error(`Unsupported ticket status in persistence: ${status}`);
-};
-
-const mapTicketRecordToDto = (record: TicketRecord): TicketSummaryDto => {
+const mapTicketRecordToDto = (record: TicketRecord) => {
   return {
     id: record.id,
     title: record.title,
-    status: toTicketStatus(record.status),
+    status: ticketStatusSchema.parse(record.status),
   };
 };
 
 const createTicketInputFromRequest = (request: CreateTicketRequestDto) => {
-  if (typeof request.title !== "string") {
-    throw new Error("Ticket title is required");
-  }
-
-  const title = request.title.trim();
-
-  if (title.length === 0) {
-    throw new Error("Ticket title is required");
-  }
-
   return {
     id: crypto.randomUUID(),
-    title,
+    title: request.title,
     status: "open" as const,
   };
 };
@@ -50,9 +34,9 @@ export const listTickets = async (): Promise<ListTicketsResponseDto> => {
     },
   });
 
-  return {
-    tickets: records.map(mapTicketRecordToDto),
-  };
+  return listTicketsResponseSchema.parse({
+    tickets: records.map((record) => ticketSummarySchema.parse(mapTicketRecordToDto(record))),
+  });
 };
 
 export const createTicket = async (
@@ -62,7 +46,7 @@ export const createTicket = async (
     data: createTicketInputFromRequest(request),
   });
 
-  return {
-    ticket: mapTicketRecordToDto(record),
-  };
+  return createTicketResponseSchema.parse({
+    ticket: ticketSummarySchema.parse(mapTicketRecordToDto(record)),
+  });
 };
