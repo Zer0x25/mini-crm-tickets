@@ -27,3 +27,11 @@ Thumbs.db
 # local runtime
 tmp/
 .temp/
+
+# turbo cache
+.turbo/
+
+# prettier/husky config (if not tracked)
+.prettierignore
+.prettierrc.json
+.husky/
